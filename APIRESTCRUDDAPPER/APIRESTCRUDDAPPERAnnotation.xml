@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>APIRESTCRUDDAPPER</name>
+    </assembly>
+    <members>
+        <member name="M:APIRESTCRUDDAPPER.Controllers.UsuarioController.ObterUsuariosAsync">
+            <summary>
+            Obter todos os Usuários.
+            </summary>
+            <remarks>
+            Este endpoint retorna uma lista de todos os usuários cadastrados.
+            </remarks>
+            <returns> Lista de Usuários </returns>
+            <response code="200"> Lista de usuários retornada com sucesso.</response>
+        </member>
+        <member name="M:APIRESTCRUDDAPPER.Controllers.UsuarioController.ObterUsuarioIdAsync(System.Int32)">
+            <summary>
+            Obter Usuário por Id.
+            </summary>
+            <remarks>
+            Este endpoint retorna o usuário pelo seu Id cadastrado.
+            </remarks>
+            <param name="usuarioId"></param>
+            <returns> Usuário Id </returns>
+            <response code="200"> Retorno do usuário pelo Id com sucesso.</response>
+        </member>
+        <member name="M:APIRESTCRUDDAPPER.Controllers.UsuarioController.AdicionarUsuarioAsync(APIRESTCRUDDAPPER.Dto.UsuarioCriarDto)">
+            <summary>
+            Adicionar Usuário.
+            </summary>
+            <remarks>
+            Este endpoint adiciona um usuário.
+            </remarks>
+            <param name="usuarioCriarDto"></param>
+            <returns> Adicionar usuário </returns>
+            <response code="200"> Usuário adicionado com sucesso.</response>
+        </member>
+        <member name="M:APIRESTCRUDDAPPER.Controllers.UsuarioController.EditarUsuarioAsync(APIRESTCRUDDAPPER.Dto.UsuarioEditarDto)">
+            <summary>
+            Editar Usuário.
+            </summary>
+            <remarks>
+            Este endpoint edita um usuário.
+            </remarks>
+            <param name="usuarioEditarDto"></param>
+            <returns> Usuário editado </returns>
+            <response code="200"> Usuário editado com sucesso.</response>
+        </member>
+        <member name="M:APIRESTCRUDDAPPER.Controllers.UsuarioController.DeletarUsuarioAsync(System.Int32)">
+            <summary>
+            Deletar Usuário.
+            </summary>
+            <remarks>
+            Este endpoint deleta um usuário.
+            </remarks>
+            <param name="usuarioId"></param>
+            <returns> Usuário deletado </returns>
+            <response code="200"> Usuário editado com sucesso.</response>
+        </member>
+    </members>
+</doc>
