@@ -1,3 +1,5 @@
+using APIRESTCRUDDAPPER.Application.Profiles.Profiles;
+using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Services;
 using Microsoft.OpenApi.Models;
 
@@ -30,7 +32,8 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
 
-builder.Services.AddAutoMapper(typeof(Program)); 
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(typeof(ProfileAutoMapper));
 
 var app = builder.Build();
 
