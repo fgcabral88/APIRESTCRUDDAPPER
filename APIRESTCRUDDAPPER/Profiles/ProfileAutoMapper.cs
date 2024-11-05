@@ -1,5 +1,5 @@
 ﻿using APIRESTCRUDDAPPER.Dto;
-using APIRESTCRUDDAPPER.Models;
+using APIRESTCRUDDAPPER.Models.Usuario;
 using AutoMapper;
 
 namespace APIRESTCRUDDAPPER.Profiles

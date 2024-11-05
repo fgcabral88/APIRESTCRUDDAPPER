@@ -1,5 +1,6 @@
 ﻿using APIRESTCRUDDAPPER.Dto;
 using APIRESTCRUDDAPPER.Models;
+using APIRESTCRUDDAPPER.Models.Usuario;
 using AutoMapper;
 using Dapper;
 using System.Data.SqlClient;
