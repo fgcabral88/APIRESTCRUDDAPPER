@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIRESTCRUDDAPPER", "APIRESTCRUDDAPPER\APIRESTCRUDDAPPER.csproj", "{09F9FFAB-A4C8-4CDB-B94D-448C6EE46D7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIRESTCRUDDAPPER", "APIRESTCRUDDAPPER\APIRESTCRUDDAPPER.csproj", "{09F9FFAB-A4C8-4CDB-B94D-448C6EE46D7E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F5182205-D832-452A-9F13-D4B268D67DED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIRESTCRUDDAPPER.Test", "APIRESTCRUDDAPPER.Test\APIRESTCRUDDAPPER.Test.csproj", "{11AF2CE8-6725-412B-A499-EB5C08F95DD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{09F9FFAB-A4C8-4CDB-B94D-448C6EE46D7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09F9FFAB-A4C8-4CDB-B94D-448C6EE46D7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09F9FFAB-A4C8-4CDB-B94D-448C6EE46D7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11AF2CE8-6725-412B-A499-EB5C08F95DD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11AF2CE8-6725-412B-A499-EB5C08F95DD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11AF2CE8-6725-412B-A499-EB5C08F95DD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11AF2CE8-6725-412B-A499-EB5C08F95DD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{11AF2CE8-6725-412B-A499-EB5C08F95DD0} = {F5182205-D832-452A-9F13-D4B268D67DED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {79106D75-2208-404F-9654-E55B757DA96A}

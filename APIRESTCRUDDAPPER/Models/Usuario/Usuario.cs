@@ -1,4 +1,4 @@
-﻿namespace APIRESTCRUDDAPPER.Models
+﻿namespace APIRESTCRUDDAPPER.Models.Usuario
 {
     public class Usuario
     {
