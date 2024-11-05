@@ -1,8 +1,10 @@
-﻿using APIRESTCRUDDAPPER.Dto;
+﻿using APIRESTCRUDDAPPER.Domain.Entitys;
+using APIRESTCRUDDAPPER.Domain.Interfaces;
+using APIRESTCRUDDAPPER.Dto;
 using APIRESTCRUDDAPPER.Models;
-using APIRESTCRUDDAPPER.Models.Usuario;
 using AutoMapper;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 
 namespace APIRESTCRUDDAPPER.Services
@@ -18,9 +20,9 @@ namespace APIRESTCRUDDAPPER.Services
             _mapper = mapper;
         }
 
-        public async Task<ResponseModel<List<UsuarioListarDto>>> ObterUsuariosAsync()
+        public async Task<ResponseBase<List<UsuarioListarDto>>> ObterUsuariosAsync()
         {
-            ResponseModel<List<UsuarioListarDto>> response = new ResponseModel<List<UsuarioListarDto>>();
+            ResponseBase<List<UsuarioListarDto>> response = new ResponseBase<List<UsuarioListarDto>>();
 
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
@@ -45,9 +47,9 @@ namespace APIRESTCRUDDAPPER.Services
             return response;
         }
 
-        public async Task<ResponseModel<UsuarioListarDto>> ObterUsuarioIdAsync(int usuarioId)
+        public async Task<ResponseBase<UsuarioListarDto>> ObterUsuarioIdAsync(int usuarioId)
         {
-            ResponseModel<UsuarioListarDto> response = new ResponseModel<UsuarioListarDto>();
+            ResponseBase<UsuarioListarDto> response = new ResponseBase<UsuarioListarDto>();
 
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
@@ -72,9 +74,9 @@ namespace APIRESTCRUDDAPPER.Services
             return response;
         }
 
-        public async Task<ResponseModel<List<UsuarioListarDto>>> AdicionarUsuarioAsync(UsuarioCriarDto usuarioCriarDto)
+        public async Task<ResponseBase<List<UsuarioListarDto>>> AdicionarUsuarioAsync(UsuarioCriarDto usuarioCriarDto)
         {
-            ResponseModel<List<UsuarioListarDto>> response = new ResponseModel<List<UsuarioListarDto>>();
+            ResponseBase<List<UsuarioListarDto>> response = new ResponseBase<List<UsuarioListarDto>>();
 
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
@@ -102,9 +104,9 @@ namespace APIRESTCRUDDAPPER.Services
             return response;
         }
 
-        public async Task<ResponseModel<List<UsuarioListarDto>>> EditarUsuarioAsync(UsuarioEditarDto usuarioEditarDto)
+        public async Task<ResponseBase<List<UsuarioListarDto>>> EditarUsuarioAsync(UsuarioEditarDto usuarioEditarDto)
         {
-            ResponseModel<List<UsuarioListarDto>> response = new ResponseModel<List<UsuarioListarDto>>();
+            ResponseBase<List<UsuarioListarDto>> response = new ResponseBase<List<UsuarioListarDto>>();
 
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
@@ -132,9 +134,9 @@ namespace APIRESTCRUDDAPPER.Services
             return response;
         }
 
-        public async Task<ResponseModel<List<UsuarioListarDto>>> DeletarUsuarioAsync(int usuarioId)
+        public async Task<ResponseBase<List<UsuarioListarDto>>> DeletarUsuarioAsync(int usuarioId)
         {
-            ResponseModel<List<UsuarioListarDto>> response = new ResponseModel<List<UsuarioListarDto>>();
+            ResponseBase<List<UsuarioListarDto>> response = new ResponseBase<List<UsuarioListarDto>>();
 
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))

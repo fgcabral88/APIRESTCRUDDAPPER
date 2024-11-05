@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using APIRESTCRUDDAPPER.Controllers;
 using APIRESTCRUDDAPPER.Dto;
 using APIRESTCRUDDAPPER.Models;
-using APIRESTCRUDDAPPER.Services;
+using APIRESTCRUDDAPPER.Domain.Interfaces;
+using APIRESTCRUDDAPPER.Domain.Enums;
 
 namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 {
@@ -24,9 +25,9 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
         public async Task ObterUsuariosAsync_ReturnsOkResult_WhenStatusIsTrue()
         {
             // Arrange
-            var usuariosDto = new ResponseModel<List<UsuarioListarDto>>
+            var usuariosDto = new ResponseBase<List<UsuarioListarDto>>
             {
-                Dados = new List<UsuarioListarDto> { new UsuarioListarDto { Id = 1, NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, Situacao = true } },
+                Dados = new List<UsuarioListarDto> { new UsuarioListarDto { Id = 1, NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, Situacao = SituacaoType.Ativo } },
                 Status = true
             };
 
@@ -37,7 +38,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnValue = Assert.IsType<ResponseModel<List<UsuarioListarDto>>>(okResult.Value);
+            var returnValue = Assert.IsType<ResponseBase<List<UsuarioListarDto>>>(okResult.Value);
 
             Assert.True(returnValue.Status);
             Assert.NotNull(returnValue.Dados);
@@ -48,7 +49,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
         public async Task ObterUsuariosAsync_ReturnsNotFound_WhenStatusIsFalse()
         {
             // Arrange
-            var usuariosDto = new ResponseModel<List<UsuarioListarDto>>
+            var usuariosDto = new ResponseBase<List<UsuarioListarDto>>
             {
                 Status = false,
                 Dados = null
@@ -61,7 +62,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 
             // Assert
             var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-            var returnValue = Assert.IsType<ResponseModel<List<UsuarioListarDto>>>(notFoundResult.Value);
+            var returnValue = Assert.IsType<ResponseBase<List<UsuarioListarDto>>>(notFoundResult.Value);
 
             Assert.False(returnValue.Status);
             Assert.Null(returnValue.Dados);
@@ -76,9 +77,9 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
         {
             // Arrange
             int usuarioId = 1;
-            var usuarioDto = new ResponseModel<UsuarioListarDto>
+            var usuarioDto = new ResponseBase<UsuarioListarDto>
             {
-                Dados = new UsuarioListarDto { Id = 1, NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, Situacao = true },
+                Dados = new UsuarioListarDto { Id = 1, NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, Situacao = SituacaoType.Ativo },
                 Status = true
             };
 
@@ -89,7 +90,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnValue = Assert.IsType<ResponseModel<UsuarioListarDto>>(okResult.Value);
+            var returnValue = Assert.IsType<ResponseBase<UsuarioListarDto>>(okResult.Value);
 
             Assert.True(returnValue.Status);
             Assert.NotNull(returnValue.Dados);
@@ -101,7 +102,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
         {
             // Arrange
             int usuarioId = 1;
-            var usuarioDto = new ResponseModel<UsuarioListarDto>
+            var usuarioDto = new ResponseBase<UsuarioListarDto>
             {
                 Status = false,
                 Dados = null
@@ -114,7 +115,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 
             // Assert
             var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-            var returnValue = Assert.IsType<ResponseModel<UsuarioListarDto>>(notFoundResult.Value);
+            var returnValue = Assert.IsType<ResponseBase<UsuarioListarDto>>(notFoundResult.Value);
 
             Assert.False(returnValue.Status);
             Assert.Null(returnValue.Dados);
@@ -128,10 +129,10 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
         public async Task AdicionarUsuarioAsync_ReturnsOkResult_WhenStatusIsTrue()
         {
             // Arrange
-            var usuarioCriarDto = new UsuarioCriarDto { NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, CPF = "11111111111", Senha = "12345",  Situacao = true };
-            var usuarioDto = new ResponseModel<List<UsuarioListarDto>>
+            var usuarioCriarDto = new UsuarioCriarDto { NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, CPF = "11111111111", Senha = "12345",  Situacao = SituacaoType.Ativo};
+            var usuarioDto = new ResponseBase<List<UsuarioListarDto>>
             {
-                Dados = new List<UsuarioListarDto> { new UsuarioListarDto { NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, Situacao = true } },
+                Dados = new List<UsuarioListarDto> { new UsuarioListarDto { NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, Situacao = SituacaoType.Ativo } },
                 Status = true
             };
 
@@ -142,7 +143,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnValue = Assert.IsType<ResponseModel<List<UsuarioListarDto>>>(okResult.Value);
+            var returnValue = Assert.IsType<ResponseBase<List<UsuarioListarDto>>>(okResult.Value);
 
             Assert.True(returnValue.Status);
             Assert.NotNull(returnValue.Dados);
@@ -155,7 +156,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
         {
             // Arrange
             var usuarioCriarDto = new UsuarioCriarDto { NomeCompleto = "Usuário Inválido" };
-            var usuarioDto = new ResponseModel<List<UsuarioListarDto>>
+            var usuarioDto = new ResponseBase<List<UsuarioListarDto>>
             {
                 Dados = null,
                 Status = false
@@ -168,7 +169,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-            var returnValue = Assert.IsType<ResponseModel<List<UsuarioListarDto>>>(badRequestResult.Value);
+            var returnValue = Assert.IsType<ResponseBase<List<UsuarioListarDto>>>(badRequestResult.Value);
 
             Assert.False(returnValue.Status);
             Assert.Null(returnValue.Dados);
@@ -182,10 +183,10 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
         public async Task EditarUsuarioAsync_ReturnsOkResult_WhenStatusIsTrue()
         {
             // Arrange
-            var usuarioEditarDto = new UsuarioEditarDto { NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, CPF = "11111111111", Situacao = true };
-            var usuarioDto = new ResponseModel<List<UsuarioListarDto>>
+            var usuarioEditarDto = new UsuarioEditarDto { NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, CPF = "11111111111", Situacao = SituacaoType.Ativo };
+            var usuarioDto = new ResponseBase<List<UsuarioListarDto>>
             {
-                Dados = new List<UsuarioListarDto> { new UsuarioListarDto { NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, Situacao = true } },
+                Dados = new List<UsuarioListarDto> { new UsuarioListarDto { NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, Situacao = SituacaoType.Ativo } },
                 Status = true
             };
 
@@ -196,7 +197,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnValue = Assert.IsType<ResponseModel<List<UsuarioListarDto>>>(okResult.Value);
+            var returnValue = Assert.IsType<ResponseBase<List<UsuarioListarDto>>>(okResult.Value);
 
             Assert.True(returnValue.Status);
             Assert.NotNull(returnValue.Dados);
@@ -209,7 +210,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
         {
             // Arrange
             var usuarioEditarDto = new UsuarioEditarDto { NomeCompleto = "Usuário Inválido" };
-            var usuarioDto = new ResponseModel<List<UsuarioListarDto>>
+            var usuarioDto = new ResponseBase<List<UsuarioListarDto>>
             {
                 Status = false,
                 Dados = null
@@ -222,7 +223,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-            var returnValue = Assert.IsType<ResponseModel<List<UsuarioListarDto>>>(badRequestResult.Value);
+            var returnValue = Assert.IsType<ResponseBase<List<UsuarioListarDto>>>(badRequestResult.Value);
 
             Assert.False(returnValue.Status);
             Assert.Null(returnValue.Dados);
@@ -237,10 +238,10 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
         {
             // Arrange
             int usuarioId = 1;
-            var usuarioDto = new ResponseModel<List<UsuarioListarDto>>
+            var usuarioDto = new ResponseBase<List<UsuarioListarDto>>
             {
                 Status = true,
-                Dados = new List<UsuarioListarDto> { new UsuarioListarDto { NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, Situacao = true } } //NomeCompleto = "Usuário Removido" } }
+                Dados = new List<UsuarioListarDto> { new UsuarioListarDto { NomeCompleto = "Usuário Teste", Cargo = "Teste", Email = "test@teste.com", Salario = 1000, Situacao = SituacaoType.Ativo } } 
             };
 
             _mockService.Setup(service => service.DeletarUsuarioAsync(usuarioId)).ReturnsAsync(usuarioDto);
@@ -250,7 +251,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnValue = Assert.IsType<ResponseModel<List<UsuarioListarDto>>>(okResult.Value);
+            var returnValue = Assert.IsType<ResponseBase<List<UsuarioListarDto>>>(okResult.Value);
 
             Assert.True(returnValue.Status);
             Assert.NotNull(returnValue.Dados);
@@ -263,7 +264,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
         {
             // Arrange
             int usuarioId = 2;
-            var usuarioDto = new ResponseModel<List<UsuarioListarDto>>
+            var usuarioDto = new ResponseBase<List<UsuarioListarDto>>
             {
                 Status = false,
                 Dados = null
@@ -276,7 +277,7 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 
             // Assert
             var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-            var returnValue = Assert.IsType<ResponseModel<List<UsuarioListarDto>>>(notFoundResult.Value);
+            var returnValue = Assert.IsType<ResponseBase<List<UsuarioListarDto>>>(notFoundResult.Value);
 
             Assert.False(returnValue.Status);
             Assert.Null(returnValue.Dados);

@@ -1,4 +1,6 @@
-﻿namespace APIRESTCRUDDAPPER.Dto
+﻿using APIRESTCRUDDAPPER.Domain.Enums;
+
+namespace APIRESTCRUDDAPPER.Dto
 {
     public class UsuarioCriarDto
     {
@@ -7,7 +9,7 @@
         public string Cargo { get; set; }
         public double Salario { get; set; }
         public string CPF { get; set; }
-        public bool Situacao { get; set; } // 1- Ativo; 0 - Inativo
+        public SituacaoType Situacao { get; set; } 
         public string Senha { get; set; }
     }
 }

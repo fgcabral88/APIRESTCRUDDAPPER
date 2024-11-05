@@ -1,6 +1,6 @@
-﻿using APIRESTCRUDDAPPER.Dto;
+﻿using APIRESTCRUDDAPPER.Domain.Interfaces;
+using APIRESTCRUDDAPPER.Dto;
 using APIRESTCRUDDAPPER.Models;
-using APIRESTCRUDDAPPER.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIRESTCRUDDAPPER.Controllers
@@ -27,7 +27,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         [HttpGet]
         [Route("ObterUsuariosAsync")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ResponseModel<List<UsuarioListarDto>>), 200)]
+        [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> ObterUsuariosAsync()
         {
             var usuarios = await _usuarioInterfaceService.ObterUsuariosAsync();
@@ -50,7 +50,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         [HttpGet]
         [Route("{usuarioId}")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ResponseModel<List<UsuarioListarDto>>), 200)]
+        [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> ObterUsuarioIdAsync(int usuarioId)
         {
             var usuario = await _usuarioInterfaceService.ObterUsuarioIdAsync(usuarioId); 
@@ -73,7 +73,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         [HttpPost]
         [Route("AdicionarUsuarioAsync")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ResponseModel<List<UsuarioListarDto>>), 200)]
+        [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> AdicionarUsuarioAsync(UsuarioCriarDto usuarioCriarDto)
         {
             var usuario = await _usuarioInterfaceService.AdicionarUsuarioAsync(usuarioCriarDto);
@@ -96,7 +96,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         [HttpPut]
         [Route("EditarUsuarioAsync")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ResponseModel<List<UsuarioListarDto>>), 200)]
+        [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> EditarUsuarioAsync(UsuarioEditarDto usuarioEditarDto)
         {
             var usuario = await _usuarioInterfaceService.EditarUsuarioAsync(usuarioEditarDto);
@@ -119,7 +119,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         [HttpDelete]
         [Route("DeletarUsuarioAsync")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ResponseModel<List<UsuarioListarDto>>), 200)]
+        [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> DeletarUsuarioAsync(int usuarioId)
         {
             var usuario = await _usuarioInterfaceService.DeletarUsuarioAsync(usuarioId);

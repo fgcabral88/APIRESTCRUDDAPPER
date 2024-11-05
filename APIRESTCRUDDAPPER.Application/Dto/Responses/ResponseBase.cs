@@ -1,6 +1,6 @@
 ﻿namespace APIRESTCRUDDAPPER.Models
 {
-    public class ResponseModel<Entity>
+    public class ResponseBase<Entity>
     {
         public Entity? Dados { get; set; }
         public string Mensagem { get; set; } = string.Empty;
