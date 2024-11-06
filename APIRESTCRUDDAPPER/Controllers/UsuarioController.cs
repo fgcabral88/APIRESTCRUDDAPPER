@@ -10,10 +10,12 @@ namespace APIRESTCRUDDAPPER.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioInterface _usuarioInterfaceService;
+        private readonly ILogger<UsuarioController> _logger;
 
-        public UsuarioController(IUsuarioInterface usuarioInterfaceService)
+        public UsuarioController(IUsuarioInterface usuarioInterfaceService, ILogger<UsuarioController> logger)
         {
             _usuarioInterfaceService = usuarioInterfaceService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -33,8 +35,12 @@ namespace APIRESTCRUDDAPPER.Controllers
             var usuarios = await _usuarioInterfaceService.ObterUsuariosAsync();
 
             if (usuarios.Status == false)
+            {
+                _logger.LogError(usuarios.Mensagem);
                 return NotFound(usuarios);
+            }
 
+            _logger.LogInformation(usuarios.Mensagem);
             return Ok(usuarios);
         }
 
@@ -53,11 +59,15 @@ namespace APIRESTCRUDDAPPER.Controllers
         [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> ObterUsuarioIdAsync(int usuarioId)
         {
-            var usuario = await _usuarioInterfaceService.ObterUsuarioIdAsync(usuarioId); 
+            var usuario = await _usuarioInterfaceService.ObterUsuarioIdAsync(usuarioId);
 
             if (usuario.Status == false)
+            {
+                _logger.LogError(usuario.Mensagem);
                 return NotFound(usuario);
+            }
 
+            _logger.LogInformation(usuario.Mensagem);
             return Ok(usuario);
         }
 
@@ -79,8 +89,12 @@ namespace APIRESTCRUDDAPPER.Controllers
             var usuario = await _usuarioInterfaceService.AdicionarUsuarioAsync(usuarioCriarDto);
 
             if (usuario.Status == false)
+            {
+                _logger.LogError(usuario.Mensagem);
                 return BadRequest(usuario);
+            }
 
+            _logger.LogInformation(usuario.Mensagem);
             return Ok(usuario);
         }
 
@@ -102,8 +116,12 @@ namespace APIRESTCRUDDAPPER.Controllers
             var usuario = await _usuarioInterfaceService.EditarUsuarioAsync(usuarioEditarDto);
 
             if (usuario.Status == false)
+            {
+                _logger.LogError(usuario.Mensagem);
                 return BadRequest(usuario);
+            }
 
+            _logger.LogInformation(usuario.Mensagem);
             return Ok(usuario);
         }
 
@@ -125,8 +143,12 @@ namespace APIRESTCRUDDAPPER.Controllers
             var usuario = await _usuarioInterfaceService.DeletarUsuarioAsync(usuarioId);
 
             if (usuario.Status == false)
+            {
+                _logger.LogError(usuario.Mensagem);
                 return NotFound(usuario);
+            }
 
+            _logger.LogInformation(usuario.Mensagem);
             return Ok(usuario);
         }
     }

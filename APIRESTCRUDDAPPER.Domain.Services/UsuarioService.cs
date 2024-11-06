@@ -68,7 +68,7 @@ namespace APIRESTCRUDDAPPER.Services
                 var usuarioIdMap = _mapper.Map<UsuarioListarDto>(retornoUsuarioIdDB);
 
                 response.Dados = usuarioIdMap;
-                response.Mensagem = "Usuário retornado com sucesso";
+                response.Mensagem = "Usuário Id retornado com sucesso";
             }
 
             return response;
@@ -81,7 +81,8 @@ namespace APIRESTCRUDDAPPER.Services
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var retornoAdicionarUsuarioDB = await connection.ExecuteAsync("INSERT INTO Usuarios (NomeCompleto, Email, Cargo, Salario, CPF, Senha, Situacao) " +
+                var retornoAdicionarUsuarioDB = await connection
+                    .ExecuteAsync("INSERT INTO Usuarios(NomeCompleto, Email, Cargo, Salario, CPF, Senha, Situacao " +
                     "VALUES (@NomeCompleto, @Email, @Cargo, @Salario, @CPF, @Senha, @Situacao)", usuarioCriarDto);
 
                 if (retornoAdicionarUsuarioDB == 0)
@@ -111,8 +112,9 @@ namespace APIRESTCRUDDAPPER.Services
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var retornoAtualizarUsuarioDB = await connection.ExecuteAsync("UPDATE Usuarios SET NomeCompleto = @NomeCompleto, Email = @Email, Cargo = @Cargo, " +
-                    "Salario = @Salario, CPF = @CPF, Situacao = @Situacao WHERE Id = @Id", usuarioEditarDto);
+                var retornoAtualizarUsuarioDB = await connection
+                    .ExecuteAsync("UPDATE Usuarios SET NomeCompleto = @NomeCompleto, Email = @Email, Cargo = @Cargo, Salario = @Salario, CPF = @CPF, Situacao = @Situacao " +
+                    "WHERE Id = @Id", usuarioEditarDto);
 
                 if (retornoAtualizarUsuarioDB == 0)
                 {
