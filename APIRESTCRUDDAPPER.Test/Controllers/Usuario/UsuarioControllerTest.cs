@@ -5,18 +5,24 @@ using APIRESTCRUDDAPPER.Dto;
 using APIRESTCRUDDAPPER.Models;
 using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Domain.Enums;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
 {
     public class UsuarioControllerTest
     {
-        private readonly UsuarioController _usuarioController;
         private readonly Mock<IUsuarioInterface> _mockService;
+        private readonly ILogger<UsuarioController> _logger;
+
+        private readonly UsuarioController _usuarioController;
 
         public UsuarioControllerTest()
         {
             _mockService = new Mock<IUsuarioInterface>();
-            _usuarioController = new UsuarioController(_mockService.Object);
+            _logger = new NullLogger<UsuarioController>();
+
+            _usuarioController = new UsuarioController(_mockService.Object, _logger);
         }
 
         #region Obter Usuários Testes
