@@ -1,24 +1,22 @@
-﻿using APIRESTCRUDDAPPER.Domain.Entitys;
-using APIRESTCRUDDAPPER.Domain.Interfaces;
+﻿using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Dto;
 using APIRESTCRUDDAPPER.Models;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Diagnostics;
 
 namespace APIRESTCRUDDAPPER.Controllers
 {
     [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{versao:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioInterface _usuarioInterfaceService;
-        private readonly ILogger<UsuarioController> _logger;
 
-        public UsuarioController(IUsuarioInterface usuarioInterfaceService, ILogger<UsuarioController> logger)
+        public UsuarioController(IUsuarioInterface usuarioInterfaceService)
         {
             _usuarioInterfaceService = usuarioInterfaceService;
-            _logger = logger;
         }
 
         /// <summary>
@@ -40,11 +38,11 @@ namespace APIRESTCRUDDAPPER.Controllers
 
             if (usuarios.Status is false)
             {
-                _logger.LogError($"LOG {usuarios.Mensagem}] | {cronometro.ElapsedMilliseconds} ms");
+                Log.Error($"LOG | Mensagem: {usuarios.Mensagem} | Tempo: {cronometro.ElapsedMilliseconds} ms");
                 return NotFound(usuarios);
             }
 
-            _logger.LogInformation($"LOG {usuarios.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
+            Log.Information($"LOG | Mensagem: {usuarios.Mensagem} | Tempo: {cronometro.Elapsed} ms");
             return Ok(usuarios);
         }
 
@@ -68,11 +66,11 @@ namespace APIRESTCRUDDAPPER.Controllers
 
             if (usuario.Status is false)
             {
-                _logger.LogError($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
+                Log.Error($"LOG | Mensagem: {usuario.Mensagem} | Tempo: {cronometro.ElapsedMilliseconds} ms");
                 return NotFound(usuario);
             }
 
-            _logger.LogInformation($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
+            Log.Information($"LOG | Mensagem:  {usuario.Mensagem} | Tempo: {cronometro.ElapsedMilliseconds} ms");
             return Ok(usuario);
         }
 
@@ -96,11 +94,11 @@ namespace APIRESTCRUDDAPPER.Controllers
 
             if (usuario.Status is false)
             {
-                _logger.LogError($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
+                Log.Error($"LOG | Mensagem:  {usuario.Mensagem}  | Tempo: {cronometro.ElapsedMilliseconds} ms");
                 return BadRequest(usuario);
             }
 
-            _logger.LogInformation($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
+            Log.Information($"LOG | Mensagem:  {usuario.Mensagem}  | Tempo: {cronometro.ElapsedMilliseconds} ms");
             return Ok(usuario);
         }
 
@@ -124,11 +122,11 @@ namespace APIRESTCRUDDAPPER.Controllers
 
             if (usuario.Status is false)
             {
-                _logger.LogError($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
+                Log.Error($"LOG | Mensagem:  {usuario.Mensagem}  | Tempo: {cronometro.ElapsedMilliseconds} ms");
                 return BadRequest(usuario);
             }
 
-            _logger.LogInformation($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
+            Log.Information($"LOG | Mensagem:   {usuario.Mensagem}   | Tempo: {cronometro.ElapsedMilliseconds} ms");
             return Ok(usuario);
         }
 
@@ -152,11 +150,11 @@ namespace APIRESTCRUDDAPPER.Controllers
 
             if (usuario.Status is false)
             {
-                _logger.LogError($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
+                Log.Error($"LOG | Mensagem:   {usuario.Mensagem}   | Tempo: {cronometro.ElapsedMilliseconds} ms");
                 return NotFound(usuario);
             }
 
-            _logger.LogInformation($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
+            Log.Information($"LOG | Mensagem:   {usuario.Mensagem}   | Tempo: {cronometro.ElapsedMilliseconds} ms");
             return Ok(usuario);
         }
     }

@@ -13,16 +13,12 @@ namespace APIRESTCRUDDAPPER.Test.Controllers.UsuarioControllerTest
     public class UsuarioControllerTest
     {
         private readonly Mock<IUsuarioInterface> _mockService;
-        private readonly ILogger<UsuarioController> _logger;
-
         private readonly UsuarioController _usuarioController;
 
         public UsuarioControllerTest()
         {
             _mockService = new Mock<IUsuarioInterface>();
-            _logger = new NullLogger<UsuarioController>();
-
-            _usuarioController = new UsuarioController(_mockService.Object, _logger);
+            _usuarioController = new UsuarioController(_mockService.Object);
         }
 
         #region Obter Usuários Testes
