@@ -47,14 +47,14 @@ namespace APIRESTCRUDDAPPER.Services
             return response;
         }
 
-        public async Task<ResponseBase<UsuarioListarDto>> ObterUsuarioIdAsync(int usuarioId)
+        public async Task<ResponseBase<UsuarioListarDto>> ObterUsuarioIdAsync(int Id)
         {
             ResponseBase<UsuarioListarDto> response = new ResponseBase<UsuarioListarDto>();
 
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var retornoUsuarioIdDB = await connection.QueryFirstOrDefaultAsync<Usuario>("SELECT * FROM Usuarios WHERE Id = @Id", new { Id = usuarioId });
+                var retornoUsuarioIdDB = await connection.QueryFirstOrDefaultAsync<Usuario>("SELECT * FROM Usuarios WHERE Id = @Id", new { Id = Id });
 
                 if (retornoUsuarioIdDB is null)
                 {
@@ -136,18 +136,18 @@ namespace APIRESTCRUDDAPPER.Services
             return response;
         }
 
-        public async Task<ResponseBase<List<UsuarioListarDto>>> DeletarUsuarioAsync(int usuarioId)
+        public async Task<ResponseBase<List<UsuarioListarDto>>> DeletarUsuarioAsync(int Id)
         {
             ResponseBase<List<UsuarioListarDto>> response = new ResponseBase<List<UsuarioListarDto>>();
 
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var retornoDeletarUsuarioDB = await connection.ExecuteAsync("DELETE FROM Usuarios WHERE Id = @Id", new { Id = usuarioId });
+                var retornoDeletarUsuarioDB = await connection.ExecuteAsync("DELETE FROM Usuarios WHERE Id = @Id", new { Id = Id });
 
-                if (retornoDeletarUsuarioDB == 0)
+                if (retornoDeletarUsuarioDB <= 0)
                 {
-                    response.Mensagem = "Não foi possível deletar o usuário. Tente novamente!";
+                    response.Mensagem = "Id inválido! Não foi possível deletar o usuário. Tente novamente!";
                     response.Status = false;
 
                     return response;

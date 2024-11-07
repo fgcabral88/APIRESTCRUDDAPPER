@@ -1,8 +1,10 @@
-﻿using APIRESTCRUDDAPPER.Domain.Entitys;
-using APIRESTCRUDDAPPER.Domain.Enums;
+﻿using APIRESTCRUDDAPPER.Domain.Enums;
 
 namespace APIRESTCRUDDAPPER.Domain.Entitys
 {
+/// <summary>
+/// Classe para criação de usuários
+/// </summary>
     public class Usuario : Base
     {
         public string NomeCompleto { get; set; }
