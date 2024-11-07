@@ -7,7 +7,7 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 
-namespace APIRESTCRUDDAPPER.Services
+namespace APIRESTCRUDDAPPER.Domain.Services.Services
 {
     public class UsuarioService : IUsuarioInterface
     {
@@ -54,7 +54,7 @@ namespace APIRESTCRUDDAPPER.Services
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var retornoUsuarioIdDB = await connection.QueryFirstOrDefaultAsync<Usuario>("SELECT * FROM Usuarios WHERE Id = @Id", new { Id = Id });
+                var retornoUsuarioIdDB = await connection.QueryFirstOrDefaultAsync<Usuario>("SELECT * FROM Usuarios WHERE Id = @Id", new { Id });
 
                 if (retornoUsuarioIdDB is null)
                 {
@@ -82,7 +82,7 @@ namespace APIRESTCRUDDAPPER.Services
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 var retornoAdicionarUsuarioDB = await connection
-                    .ExecuteAsync("INSERT INTO Usuarios(NomeCompleto, Email, Cargo, Salario, CPF, Senha, Situacao) VALUES (@NomeCompleto, @Email, @Cargo, @Salario, @CPF, @Senha, @Situacao)", 
+                    .ExecuteAsync("INSERT INTO Usuarios(NomeCompleto, Email, Cargo, Salario, CPF, Senha, Situacao) VALUES (@NomeCompleto, @Email, @Cargo, @Salario, @CPF, @Senha, @Situacao)",
                     usuarioCriarDto);
 
                 if (retornoAdicionarUsuarioDB == 0)
@@ -143,7 +143,7 @@ namespace APIRESTCRUDDAPPER.Services
             // Dapper - Abre a conexão com o Banco de dados
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var retornoDeletarUsuarioDB = await connection.ExecuteAsync("DELETE FROM Usuarios WHERE Id = @Id", new { Id = Id });
+                var retornoDeletarUsuarioDB = await connection.ExecuteAsync("DELETE FROM Usuarios WHERE Id = @Id", new { Id });
 
                 if (retornoDeletarUsuarioDB <= 0)
                 {
