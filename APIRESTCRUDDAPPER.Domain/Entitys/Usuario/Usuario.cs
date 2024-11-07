@@ -1,5 +1,4 @@
 ﻿using APIRESTCRUDDAPPER.Domain.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace APIRESTCRUDDAPPER.Domain.Entitys
 {

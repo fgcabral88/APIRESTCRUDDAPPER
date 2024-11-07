@@ -1,3 +1,4 @@
+using APIRESTCRUDDAPPER.Application.Middlewares;
 using APIRESTCRUDDAPPER.Application.Profiles.Profiles;
 using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Services;
@@ -64,6 +65,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
     app.UseSerilogRequestLogging();
+    app.UseMiddleware<ErrorHandlerMiddleware>();
 }
 
 app.UseHttpsRedirection();
