@@ -7,8 +7,9 @@ using System.Diagnostics;
 
 namespace APIRESTCRUDDAPPER.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioInterface _usuarioInterfaceService;
