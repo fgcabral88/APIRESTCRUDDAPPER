@@ -1,6 +1,8 @@
 using APIRESTCRUDDAPPER.Application.Profiles.Profiles;
 using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Services;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
@@ -36,6 +38,13 @@ builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(ProfileAutoMapper));
 builder.Host.UseSerilog();
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true; // Assume versão padrão se não especificada
+    options.DefaultApiVersion = new ApiVersion(1, 0); // Versão padrão
+    options.ApiVersionReader = new QueryStringApiVersionReader("api-version"); // Define como a versão será lida
+    options.ReportApiVersions = true; // Relatar as versões disponíveis nas respostas
+});
 
 var app = builder.Build();
 
@@ -53,7 +62,7 @@ if (app.Environment.IsDevelopment())
             diagnosticContext.Set("Message", options.MessageTemplate);
         };
     });
-
+    app.UseApiVersioning();
 }
 
 app.UseHttpsRedirection();
