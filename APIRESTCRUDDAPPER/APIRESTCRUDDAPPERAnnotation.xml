@@ -13,6 +13,9 @@
             </remarks>
             <returns> Lista de Usuários </returns>
             <response code="200"> Lista de usuários retornada com sucesso.</response>
+            <response code="404"> Lista de usuários não encontrada.</response>
+            <response code="400"> Lista de usuários não encontrada.</response>
+            <response code="500"> Erro interno.</response>
         </member>
         <member name="M:APIRESTCRUDDAPPER.Controllers.UsuarioController.ObterUsuarioIdAsync(System.Int32)">
             <summary>
@@ -21,9 +24,12 @@
             <remarks>
             Este endpoint retorna o usuário pelo seu Id cadastrado.
             </remarks>
-            <param name="usuarioId"></param>
+            <param name="usuarioId">Id do usuário</param>
             <returns> Usuário Id </returns>
             <response code="200"> Retorno do usuário pelo Id com sucesso.</response>
+            <response code="404"> Usuário não encontrado.</response>
+            <response code="400"> Usuário não encontrado.</response>
+            <response code="500"> Erro interno.</response>
         </member>
         <member name="M:APIRESTCRUDDAPPER.Controllers.UsuarioController.AdicionarUsuarioAsync(APIRESTCRUDDAPPER.Dto.UsuarioCriarDto)">
             <summary>
@@ -35,6 +41,9 @@
             <param name="usuarioCriarDto"></param>
             <returns> Adicionar usuário </returns>
             <response code="200"> Usuário adicionado com sucesso.</response>
+            <response code="404"> Usuário não adicionado.</response>
+            <response code="400"> Usuário não adicionado.</response>    
+            <response code="500"> Erro interno.</response>
         </member>
         <member name="M:APIRESTCRUDDAPPER.Controllers.UsuarioController.EditarUsuarioAsync(APIRESTCRUDDAPPER.Dto.UsuarioEditarDto)">
             <summary>
@@ -46,6 +55,9 @@
             <param name="usuarioEditarDto"></param>
             <returns> Usuário editado </returns>
             <response code="200"> Usuário editado com sucesso.</response>
+            <response code="404"> Usuário não editado.</response>
+            <response code="400"> Usuário não editado.</response>
+            <response code="500"> Erro interno.</response>
         </member>
         <member name="M:APIRESTCRUDDAPPER.Controllers.UsuarioController.DeletarUsuarioAsync(System.Int32)">
             <summary>
@@ -56,7 +68,10 @@
             </remarks>
             <param name="usuarioId"></param>
             <returns> Usuário deletado </returns>
-            <response code="200"> Usuário editado com sucesso.</response>
+            <response code="200"> Usuário deletado com sucesso.</response>
+            <response code="404"> Usuário não deletado.</response>
+            <response code="400"> Usuário não deletado.</response>
+            <response code="500"> Erro interno.</response>
         </member>
     </members>
 </doc>
