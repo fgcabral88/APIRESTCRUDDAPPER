@@ -82,8 +82,8 @@ namespace APIRESTCRUDDAPPER.Services
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 var retornoAdicionarUsuarioDB = await connection
-                    .ExecuteAsync("INSERT INTO Usuarios(NomeCompleto, Email, Cargo, Salario, CPF, Senha, Situacao " +
-                    "VALUES (@NomeCompleto, @Email, @Cargo, @Salario, @CPF, @Senha, @Situacao)", usuarioCriarDto);
+                    .ExecuteAsync("INSERT INTO Usuarios(NomeCompleto, Email, Cargo, Salario, CPF, Senha, Situacao) VALUES (@NomeCompleto, @Email, @Cargo, @Salario, @CPF, @Senha, @Situacao)", 
+                    usuarioCriarDto);
 
                 if (retornoAdicionarUsuarioDB == 0)
                 {

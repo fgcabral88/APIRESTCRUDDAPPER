@@ -1,7 +1,9 @@
-﻿using APIRESTCRUDDAPPER.Domain.Interfaces;
+﻿using APIRESTCRUDDAPPER.Domain.Entitys;
+using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Dto;
 using APIRESTCRUDDAPPER.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace APIRESTCRUDDAPPER.Controllers
 {
@@ -32,15 +34,16 @@ namespace APIRESTCRUDDAPPER.Controllers
         [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> ObterUsuariosAsync()
         {
+            var cronometro = Stopwatch.StartNew();
             var usuarios = await _usuarioInterfaceService.ObterUsuariosAsync();
 
-            if (usuarios.Status == false)
+            if (usuarios.Status is false)
             {
-                _logger.LogError(usuarios.Mensagem);
+                _logger.LogError($"LOG {usuarios.Mensagem}] | {cronometro.ElapsedMilliseconds} ms");
                 return NotFound(usuarios);
             }
 
-            _logger.LogInformation(usuarios.Mensagem);
+            _logger.LogInformation($"LOG {usuarios.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
             return Ok(usuarios);
         }
 
@@ -59,15 +62,16 @@ namespace APIRESTCRUDDAPPER.Controllers
         [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> ObterUsuarioIdAsync(int usuarioId)
         {
+            var cronometro = Stopwatch.StartNew();
             var usuario = await _usuarioInterfaceService.ObterUsuarioIdAsync(usuarioId);
 
-            if (usuario.Status == false)
+            if (usuario.Status is false)
             {
-                _logger.LogError(usuario.Mensagem);
+                _logger.LogError($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
                 return NotFound(usuario);
             }
 
-            _logger.LogInformation(usuario.Mensagem);
+            _logger.LogInformation($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
             return Ok(usuario);
         }
 
@@ -86,15 +90,16 @@ namespace APIRESTCRUDDAPPER.Controllers
         [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> AdicionarUsuarioAsync(UsuarioCriarDto usuarioCriarDto)
         {
+            var cronometro = Stopwatch.StartNew();
             var usuario = await _usuarioInterfaceService.AdicionarUsuarioAsync(usuarioCriarDto);
 
-            if (usuario.Status == false)
+            if (usuario.Status is false)
             {
-                _logger.LogError(usuario.Mensagem);
+                _logger.LogError($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
                 return BadRequest(usuario);
             }
 
-            _logger.LogInformation(usuario.Mensagem);
+            _logger.LogInformation($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
             return Ok(usuario);
         }
 
@@ -113,15 +118,16 @@ namespace APIRESTCRUDDAPPER.Controllers
         [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> EditarUsuarioAsync(UsuarioEditarDto usuarioEditarDto)
         {
+            var cronometro = Stopwatch.StartNew();
             var usuario = await _usuarioInterfaceService.EditarUsuarioAsync(usuarioEditarDto);
 
-            if (usuario.Status == false)
+            if (usuario.Status is false)
             {
-                _logger.LogError(usuario.Mensagem);
+                _logger.LogError($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
                 return BadRequest(usuario);
             }
 
-            _logger.LogInformation(usuario.Mensagem);
+            _logger.LogInformation($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
             return Ok(usuario);
         }
 
@@ -140,15 +146,16 @@ namespace APIRESTCRUDDAPPER.Controllers
         [ProducesResponseType(typeof(ResponseBase<List<UsuarioListarDto>>), 200)]
         public async Task<IActionResult> DeletarUsuarioAsync(int usuarioId)
         {
+            var cronometro = Stopwatch.StartNew();
             var usuario = await _usuarioInterfaceService.DeletarUsuarioAsync(usuarioId);
 
-            if (usuario.Status == false)
+            if (usuario.Status is false)
             {
-                _logger.LogError(usuario.Mensagem);
+                _logger.LogError($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
                 return NotFound(usuario);
             }
 
-            _logger.LogInformation(usuario.Mensagem);
+            _logger.LogInformation($"LOG {usuario.Mensagem} | {cronometro.ElapsedMilliseconds} ms");
             return Ok(usuario);
         }
     }

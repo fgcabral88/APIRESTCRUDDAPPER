@@ -3,6 +3,7 @@ using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Services;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
-    .WriteTo.Console() // Saída de logs no console
-    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day) // Saída de logs em arquivos
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day) 
     .CreateLogger();
 
 // Add services to the container.
@@ -44,6 +44,16 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
+    app.UseSerilogRequestLogging(options =>
+    {
+        options.GetLevel = (httpContext, elapsed, ex) => elapsed > 500 ? LogEventLevel.Warning : LogEventLevel.Information;
+        options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+        {
+            diagnosticContext.Set("UserName", httpContext.User.Identity?.Name);
+            diagnosticContext.Set("Message", options.MessageTemplate);
+        };
+    });
+
 }
 
 app.UseHttpsRedirection();
