@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +41,7 @@ builder.Services.AddApiVersioning(options =>
 {
     options.AssumeDefaultVersionWhenUnspecified = true; // Assume versão padrão se não especificada
     options.DefaultApiVersion = new ApiVersion(1, 0); // Versão padrão
-    options.ApiVersionReader = new QueryStringApiVersionReader("api-version"); // Define como a versão será lida
+    options.ApiVersionReader = new QueryStringApiVersionReader("api-versao"); // Define como a versão será lida
     options.ReportApiVersions = true; // Relatar as versões disponíveis nas respostas
 });
 
@@ -53,15 +52,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
-    app.UseSerilogRequestLogging(options =>
-    {
-        options.GetLevel = (httpContext, elapsed, ex) => elapsed > 500 ? LogEventLevel.Warning : LogEventLevel.Information;
-        options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
-        {
-            diagnosticContext.Set("UserName", httpContext.User.Identity?.Name);
-            diagnosticContext.Set("Message", options.MessageTemplate);
-        };
-    });
+    app.UseSerilogRequestLogging();
     app.UseApiVersioning();
 }
 
