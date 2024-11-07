@@ -1,7 +1,11 @@
 using APIRESTCRUDDAPPER.Application.Middlewares;
 using APIRESTCRUDDAPPER.Application.Profiles.Profiles;
+using APIRESTCRUDDAPPER.Application.Validations;
 using APIRESTCRUDDAPPER.Domain.Interfaces;
-using APIRESTCRUDDAPPER.Services;
+using APIRESTCRUDDAPPER.Domain.Services.Services;
+using APIRESTCRUDDAPPER.Dto;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -53,6 +57,10 @@ builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(ProfileAutoMapper));
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddScoped<IValidator<UsuarioCriarDto>, UsuarioCriarDtoValidator>();
+
 // Configura o Serilog para usar a configuração do appsettings.json
 Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).Enrich.FromLogContext().WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day).CreateLogger();
 builder.Host.UseSerilog();
@@ -66,6 +74,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
     app.UseSerilogRequestLogging();
     app.UseMiddleware<ErrorHandlerMiddleware>();
+    app.UseRouting();
+    app.MapControllers();
 }
 
 app.UseHttpsRedirection();
