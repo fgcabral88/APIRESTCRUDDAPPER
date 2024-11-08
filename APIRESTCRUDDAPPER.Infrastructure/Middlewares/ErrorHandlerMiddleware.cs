@@ -2,7 +2,7 @@
 using Serilog;
 using System.Text.Json;
 
-namespace APIRESTCRUDDAPPER.Application.Middlewares
+namespace APIRESTCRUDDAPPER.Infrastructure.Middlewares
 {
     public class ErrorHandlerMiddleware
     {
