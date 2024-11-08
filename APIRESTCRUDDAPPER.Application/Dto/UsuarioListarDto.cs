@@ -1,10 +1,10 @@
-﻿using APIRESTCRUDDAPPER.Domain.Enums;
+﻿using APIRESTCRUDDAPPER.Application.Dto;
+using APIRESTCRUDDAPPER.Domain.Enums;
 
 namespace APIRESTCRUDDAPPER.Dto
 {
-    public class UsuarioListarDto
+    public class UsuarioListarDto : BaseDto
     {
-        public int Id { get; set; }
         public string NomeCompleto { get; set; }
         public string Email { get; set; }
         public string Cargo { get; set; }
