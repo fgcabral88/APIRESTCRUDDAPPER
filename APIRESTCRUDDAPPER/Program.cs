@@ -1,9 +1,9 @@
-using APIRESTCRUDDAPPER.Application.Middlewares;
 using APIRESTCRUDDAPPER.Application.Profiles.Profiles;
 using APIRESTCRUDDAPPER.Application.Validations;
 using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Domain.Services.Services;
 using APIRESTCRUDDAPPER.Dto;
+using APIRESTCRUDDAPPER.Infrastructure.Middlewares;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
