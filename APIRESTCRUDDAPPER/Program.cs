@@ -12,6 +12,8 @@ using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Domain.Services.Services;
 using APIRESTCRUDDAPPER.Infrastructure.Repositorys;
 using APIRESTCRUDDAPPER.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -91,6 +93,11 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 #endregion
 
+#region Health Checks - Verifica a saúde da aplicação
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!, name: "sqlserver");
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -100,6 +107,24 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
 }
 
+app.MapHealthChecks("/health", new HealthCheckOptions()
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var result = JsonSerializer.Serialize(new
+        {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(e => new {
+                name = e.Key,
+                status = e.Value.Status.ToString(),
+                exception = e.Value.Exception?.Message,
+                duration = e.Value.Duration.TotalMilliseconds               
+            })
+        });
+        await context.Response.WriteAsync(result);
+    }
+});
 app.UseSerilogRequestLogging();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseHttpsRedirection();
