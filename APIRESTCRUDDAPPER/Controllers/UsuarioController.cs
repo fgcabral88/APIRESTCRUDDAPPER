@@ -11,9 +11,9 @@ namespace APIRESTCRUDDAPPER.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
-        private readonly IUsuarioInterface _usuarioInterfaceService;
+        private readonly IUsuarioService _usuarioInterfaceService;
 
-        public UsuarioController(IUsuarioInterface usuarioInterfaceService)
+        public UsuarioController(IUsuarioService usuarioInterfaceService)
         {
             _usuarioInterfaceService = usuarioInterfaceService;
         }
@@ -49,7 +49,6 @@ namespace APIRESTCRUDDAPPER.Controllers
             return Ok(usuarios);
         }
 
-
         /// <summary>
         /// Obter Usuário por Id.
         /// </summary>
@@ -62,7 +61,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         /// <response code="404"> Usuário não encontrado.</response>
         /// <response code="400"> Usuário não encontrado.</response>
         [HttpGet]
-        [Route("{usuarioId}")]
+        [Route("{Id}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

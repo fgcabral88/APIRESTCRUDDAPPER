@@ -3,7 +3,7 @@ using APIRESTCRUDDAPPER.Models;
 
 namespace APIRESTCRUDDAPPER.Domain.Interfaces
 {
-    public interface IUsuarioInterface
+    public interface IUsuarioService
     {
         Task<ResponseBase<List<UsuarioListarDto>>> ObterUsuariosAsync();
         Task<ResponseBase<UsuarioListarDto>> ObterUsuarioIdAsync(int Id);

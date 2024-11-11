@@ -1,75 +1,63 @@
-﻿using APIRESTCRUDDAPPER.Domain.Entitys;
-using APIRESTCRUDDAPPER.Domain.Interfaces;
+﻿using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Dto;
+using APIRESTCRUDDAPPER.Infrastructure.Interfaces;
 using APIRESTCRUDDAPPER.Models;
 using AutoMapper;
-using Dapper;
 using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
 
 namespace APIRESTCRUDDAPPER.Domain.Services.Services
 {
-    public class UsuarioService : IUsuarioInterface
+    public class UsuarioService : IUsuarioService 
     {
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public UsuarioService(IConfiguration configuration, IMapper mapper)
+        public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper, IConfiguration configuration)
         {
-            _configuration = configuration;
+            _usuarioRepository = usuarioRepository;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<ResponseBase<List<UsuarioListarDto>>> ObterUsuariosAsync()
         {
             ResponseBase<List<UsuarioListarDto>> response = new ResponseBase<List<UsuarioListarDto>>();
 
-            // Dapper - Abre a conexão com o Banco de dados
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            var usuariosDB = await _usuarioRepository.ObterUsuariosRepositorioAsync();
+
+            if (!usuariosDB.Any())
             {
-                var retornoUsuariosDB = await connection.QueryAsync<Usuario>("SELECT * FROM Usuarios");
-
-                if (retornoUsuariosDB.Count() == 0)
-                {
-                    response.Mensagem = "Nenhum usuário encontrado. Tente novamente!";
-                    response.Status = false;
-
-                    return response;
-                }
-
-                // AutoMapper
-                var usuarioMap = _mapper.Map<List<UsuarioListarDto>>(retornoUsuariosDB);
-
-                response.Dados = usuarioMap;
-                response.Mensagem = "Usuários retornados com sucesso";
+                response.Mensagem = "Nenhum usuário encontrado. Tente novamente!";
+                response.Status = false;
+                return response; 
             }
+
+            var usuariosMap = _mapper.Map<List<UsuarioListarDto>>(usuariosDB);
+            response.Dados = usuariosMap;
+            response.Mensagem = "Usuários retornados com sucesso";
+            response.Status = true;
 
             return response;
         }
 
-        public async Task<ResponseBase<UsuarioListarDto>> ObterUsuarioIdAsync(int Id)
+        public async Task<ResponseBase<UsuarioListarDto>> ObterUsuarioIdAsync(int id)
         {
             ResponseBase<UsuarioListarDto> response = new ResponseBase<UsuarioListarDto>();
 
-            // Dapper - Abre a conexão com o Banco de dados
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            var usuarioIdDB = await _usuarioRepository.ObterUsuarioPorIdRepositorioAsync(id);
+
+            if (usuarioIdDB is null || usuarioIdDB.Id <= 0)
             {
-                var retornoUsuarioIdDB = await connection.QueryFirstOrDefaultAsync<Usuario>("SELECT * FROM Usuarios WHERE Id = @Id", new { Id });
-
-                if (retornoUsuarioIdDB is null)
-                {
-                    response.Mensagem = "Nenhum usuário encontrado com o Id informado. Tente novamente!";
-                    response.Status = false;
-
-                    return response;
-                }
-
-                // AutoMapper
-                var usuarioIdMap = _mapper.Map<UsuarioListarDto>(retornoUsuarioIdDB);
-
-                response.Dados = usuarioIdMap;
-                response.Mensagem = "Usuário Id retornado com sucesso";
+                response.Mensagem = "Nenhum usuário encontrado com o Id informado. Tente novamente!";
+                response.Status = false;
+                return response; 
             }
+
+            var usuarioIdMap = _mapper.Map<UsuarioListarDto>(usuarioIdDB);
+            response.Dados = usuarioIdMap;
+            response.Mensagem = "Usuário Id retornado com sucesso";
+            response.Status = true;
 
             return response;
         }
@@ -78,29 +66,20 @@ namespace APIRESTCRUDDAPPER.Domain.Services.Services
         {
             ResponseBase<List<UsuarioListarDto>> response = new ResponseBase<List<UsuarioListarDto>>();
 
-            // Dapper - Abre a conexão com o Banco de dados
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            var usuarioAdicionarDB = await _usuarioRepository.AdicionarUsuarioRepositorioAsync(usuarioCriarDto);
+
+            if (!usuarioAdicionarDB.Status)
             {
-                var retornoAdicionarUsuarioDB = await connection
-                    .ExecuteAsync("INSERT INTO Usuarios(NomeCompleto, Email, Cargo, Salario, CPF, Senha, Situacao) VALUES (@NomeCompleto, @Email, @Cargo, @Salario, @CPF, @Senha, @Situacao)",
-                    usuarioCriarDto);
-
-                if (retornoAdicionarUsuarioDB == 0)
-                {
-                    response.Mensagem = "Não foi possível adicionar um novo usuário. Tente novamente!";
-                    response.Status = false;
-
-                    return response;
-                }
-
-                var retornoUsuariosAtualizadosDB = await ListUsuariosAsync(connection);
-
-                // AutoMapper
-                var usuarioMap = _mapper.Map<List<UsuarioListarDto>>(retornoUsuariosAtualizadosDB);
-
-                response.Dados = usuarioMap;
-                response.Mensagem = "Usuário adicionado com sucesso";
+                response.Mensagem = "Não foi possível adicionar um novo usuário. Refaça a operação novamente!";
+                response.Status = false;
+                return response;
             }
+
+            var usuarioListarDB = await _usuarioRepository.ListarUsuariosRepositorioAsync();
+
+            response.Dados = _mapper.Map<List<UsuarioListarDto>>(usuarioListarDB);
+            response.Mensagem = "Usuário adicionado com sucesso";
+            response.Status = true;
 
             return response;
         }
@@ -109,68 +88,86 @@ namespace APIRESTCRUDDAPPER.Domain.Services.Services
         {
             ResponseBase<List<UsuarioListarDto>> response = new ResponseBase<List<UsuarioListarDto>>();
 
-            // Dapper - Abre a conexão com o Banco de dados
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            var usuarioEditarDB = await _usuarioRepository.EditarUsuarioRespositorioAsync(usuarioEditarDto);
+
+            if (!usuarioEditarDB.Status)
             {
-                var retornoAtualizarUsuarioDB = await connection
-                    .ExecuteAsync("UPDATE Usuarios SET NomeCompleto = @NomeCompleto, Email = @Email, Cargo = @Cargo, Salario = @Salario, CPF = @CPF, Situacao = @Situacao " +
-                    "WHERE Id = @Id", usuarioEditarDto);
-
-                if (retornoAtualizarUsuarioDB == 0)
-                {
-                    response.Mensagem = "Não foi possível atualizar o usuário. Tente novamente!";
-                    response.Status = false;
-
-                    return response;
-                }
-                var retornoUsuariosAtualizadosDB = await ListUsuariosAsync(connection);
-
-                // AutoMapper
-                var usuarioMap = _mapper.Map<List<UsuarioListarDto>>(retornoUsuariosAtualizadosDB);
-
-                response.Dados = usuarioMap;
-                response.Mensagem = "Usuário atualizado com sucesso.";
-
+                response.Mensagem = "Não foi possível editar o usuário. Refaça a operação novamente!";
+                response.Status = false;
+                return response; 
             }
+
+            var usuariosAtualizado = await _usuarioRepository.ListarUsuariosRepositorioAsync();
+
+            if (usuariosAtualizado == null || !usuariosAtualizado.Status)
+            {
+                response.Mensagem = "Usuário editado, mas houve um erro ao obter a lista atualizada de usuários.";
+                response.Status = false;
+                return response;
+            }
+
+            // Mapeia os usuários para o DTO e retorna o resultado
+            response.Dados = usuariosAtualizado?.Dados?.OrderBy(x => x.Id).Select(usuario => new UsuarioListarDto
+            {
+                Id = usuario.Id,
+                NomeCompleto = usuario.NomeCompleto,
+                Email = usuario.Email,
+                Cargo = usuario.Cargo,
+                Salario = usuario.Salario,
+                Situacao = usuario.Situacao
+            }).ToList();
+
+            response.Mensagem = "Usuário editado com sucesso";
+            response.Status = true;
 
             return response;
         }
 
-        public async Task<ResponseBase<List<UsuarioListarDto>>> DeletarUsuarioAsync(int Id)
+        public async Task<ResponseBase<List<UsuarioListarDto>>> DeletarUsuarioAsync(int id)
         {
             ResponseBase<List<UsuarioListarDto>> response = new ResponseBase<List<UsuarioListarDto>>();
 
-            // Dapper - Abre a conexão com o Banco de dados
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            if (id <= 0)
             {
-                var retornoDeletarUsuarioDB = await connection.ExecuteAsync("DELETE FROM Usuarios WHERE Id = @Id", new { Id });
-
-                if (retornoDeletarUsuarioDB <= 0)
-                {
-                    response.Mensagem = "Id inválido! Não foi possível deletar o usuário. Tente novamente!";
-                    response.Status = false;
-
-                    return response;
-                }
-                var retornoUsuariosAtualizadosDB = await ListUsuariosAsync(connection);
-
-                // AutoMapper
-                var usuarioMap = _mapper.Map<List<UsuarioListarDto>>(retornoUsuariosAtualizadosDB);
-
-                response.Dados = usuarioMap;
-                response.Mensagem = "Usuário deletado com sucesso.";
+                response.Mensagem = "Id inválido! Não foi possível deletar o usuário. Tente novamente!";
+                response.Status = false;
+                return response;
             }
+
+            var usuarioDeletarDB = await _usuarioRepository.RemoverUsuarioRepositorioAsync(id);
+
+            if (!usuarioDeletarDB.Status)
+            {
+                response.Mensagem = "Não foi possível deletar o usuário. Tente novamente!";
+                response.Status = false;
+                return response;
+            }
+
+            // Se o usuário foi deletado, obtém a lista atualizada de usuários
+            var usuariosAtualizados = await _usuarioRepository.ListarUsuariosRepositorioAsync();
+
+            if (usuariosAtualizados == null || !usuariosAtualizados.Status)
+            {
+                response.Mensagem = "Usuário deletado, mas houve um erro ao obter a lista atualizada de usuários.";
+                response.Status = false;
+                return response;
+            }
+
+            // Mapeia os usuários para o DTO e retorna o resultado
+            response.Dados = usuariosAtualizados?.Dados?.OrderBy(x => x.Id).Select(usuario => new UsuarioListarDto
+                {
+                Id = usuario.Id,
+                NomeCompleto = usuario.NomeCompleto,
+                Email = usuario.Email,
+                Cargo = usuario.Cargo,
+                Salario = usuario.Salario,
+                Situacao = usuario.Situacao
+                }).ToList();
+
+            response.Mensagem = "Usuário deletado com sucesso";
+            response.Status = true;
 
             return response;
         }
-
-        #region Métodos Privados
-
-        private static async Task<IEnumerable<Usuario>> ListUsuariosAsync(SqlConnection connection)
-        {
-            return await connection.QueryAsync<Usuario>("SELECT * FROM Usuarios");
-        }
-
-        #endregion
     }
 }
