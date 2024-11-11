@@ -1,13 +1,17 @@
 using APIRESTCRUDDAPPER.Application.Profiles.Profiles;
 using APIRESTCRUDDAPPER.Application.Validations;
-using APIRESTCRUDDAPPER.Domain.Interfaces;
-using APIRESTCRUDDAPPER.Domain.Services.Services;
 using APIRESTCRUDDAPPER.Dto;
 using APIRESTCRUDDAPPER.Infrastructure.Middlewares;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Data.SqlClient;
+using System.Data;
+using APIRESTCRUDDAPPER.Domain.Interfaces;
+using APIRESTCRUDDAPPER.Domain.Services.Services;
+using APIRESTCRUDDAPPER.Infrastructure.Repositorys;
+using APIRESTCRUDDAPPER.Infrastructure.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    #region Swagger
     options.SwaggerDoc("v1", new OpenApiInfo 
     { 
         Title = "API REST",
@@ -26,7 +31,9 @@ builder.Services.AddSwaggerGen(options =>
         TermsOfService = new Uri("https://opensource.com/terms-of-service")
     });
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "APIRESTCRUDDAPPERAnnotation.xml"));
+    #endregion
 
+    #region JWT
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -50,20 +57,38 @@ builder.Services.AddSwaggerGen(options =>
             new string[] {}
         }
     });
+    #endregion
 });
 
-builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
-
+#region AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(ProfileAutoMapper));
+#endregion
 
+#region FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddScoped<IValidator<UsuarioCriarDto>, UsuarioCriarDtoValidator>();
+#endregion
 
+#region Conexão com o banco de dados + Injecão de dependência
+builder.Services.AddScoped<IDbConnection>(sp =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    return new SqlConnection(connectionString);
+});
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(); 
+#endregion
+
+#region Log
 // Configura o Serilog para usar a configuração do appsettings.json
-Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).Enrich.FromLogContext().WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day).CreateLogger();
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day).CreateLogger();
 builder.Host.UseSerilog();
+#endregion
 
 var app = builder.Build();
 
@@ -72,16 +97,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
-    app.UseSerilogRequestLogging();
-    app.UseMiddleware<ErrorHandlerMiddleware>();
-    app.UseRouting();
-    app.MapControllers();
 }
 
+app.UseSerilogRequestLogging();
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
