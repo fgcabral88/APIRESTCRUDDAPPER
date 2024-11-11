@@ -69,6 +69,7 @@ builder.Services.AddAutoMapper(typeof(ProfileAutoMapper));
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddScoped<IValidator<UsuarioCriarDto>, UsuarioCriarDtoValidator>();
+builder.Services.AddScoped<IValidator<UsuarioEditarDto>, UsuarioEditarDtoValidator>();
 #endregion
 
 #region Conexão com o banco de dados + Injecão de dependência
