@@ -35,15 +35,15 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "APIRESTCRUDDAPPERAnnotation.xml"));
     #endregion
 
-    #region JWT
+    #region Identity Server
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
+        In = ParameterLocation.Header,
+        Description = "Insira o token JWT aqui",
         Name = "Authorization",
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Insira o token JWT no formato 'Bearer {seu token}'"
+        BearerFormat = "JWT"
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -56,7 +56,7 @@ builder.Services.AddSwaggerGen(options =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            new string[] { }
         }
     });
     #endregion
@@ -98,6 +98,15 @@ builder.Services.AddHealthChecks()
     .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!, name: "sqlserver");
 #endregion
 
+#region Identity Server
+builder.Services.AddIdentityServer()
+        .AddInMemoryClients(Config.ObtenhaClientes())
+        .AddInMemoryApiScopes(Config.ObtenhaEscoposAPI())
+        .AddInMemoryIdentityResources(Config.ObtenhaRecursosIdentidade())
+        .AddInMemoryApiResources(Config.ObtenhaRecursosAPI())
+        .AddDeveloperSigningCredential(); // Apenas para desenvolvimento
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -107,6 +116,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
 }
 
+app.UseIdentityServer();
 app.MapHealthChecks("/health", new HealthCheckOptions()
 {
     ResponseWriter = async (context, report) =>
@@ -119,7 +129,7 @@ app.MapHealthChecks("/health", new HealthCheckOptions()
                 name = e.Key,
                 status = e.Value.Status.ToString(),
                 exception = e.Value.Exception?.Message,
-                duration = e.Value.Duration.TotalMilliseconds               
+                duration = e.Value.Duration.TotalMilliseconds
             })
         });
         await context.Response.WriteAsync(result);

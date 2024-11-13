@@ -77,9 +77,17 @@ namespace APIRESTCRUDDAPPER.Domain.Services.Services
 
             var usuarioListarDB = await _usuarioRepository.ListarUsuariosRepositorioAsync();
 
-            response.Dados = _mapper.Map<List<UsuarioListarDto>>(usuarioListarDB);
-            response.Mensagem = "Usuário adicionado com sucesso";
+            if (usuarioListarDB == null || !usuarioListarDB.Status)
+            {
+                response.Mensagem = "Usuário adicionado, mas houve um erro ao obter a lista atualizada de usuários.";
+                response.Status = false;
+                return response;
+            }
+
+            var usuariosMap = _mapper.Map<List<UsuarioListarDto>>(usuarioListarDB?.Dados?.OrderBy(x => x.Id).ToList());
+            response.Dados = usuariosMap;
             response.Status = true;
+            response.Mensagem = "Usuário adicionado com sucesso.";
 
             return response;
         }
