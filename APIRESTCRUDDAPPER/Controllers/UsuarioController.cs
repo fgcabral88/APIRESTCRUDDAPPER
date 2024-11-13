@@ -1,6 +1,7 @@
 ﻿using APIRESTCRUDDAPPER.Domain.Interfaces;
 using APIRESTCRUDDAPPER.Dto;
 using APIRESTCRUDDAPPER.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Diagnostics;
@@ -28,6 +29,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         /// <response code="200"> Lista de usuários retornada com sucesso.</response>
         /// <response code="404"> Lista de usuários não retornada.</response>
         /// <response code="400"> Lista de usuários não retornada.</response>
+        [Authorize]
         [HttpGet]
         [Route("ObterUsuariosAsync")]
         [Produces("application/json")]
@@ -60,6 +62,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         /// <response code="200"> Retorno do usuário pelo Id com sucesso.</response>
         /// <response code="404"> Usuário não encontrado.</response>
         /// <response code="400"> Usuário não encontrado.</response>
+        //[Authorize]
         [HttpGet]
         [Route("{Id}")]
         [Produces("application/json")]
@@ -92,6 +95,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         /// <response code="200"> Usuário adicionado com sucesso.</response>
         /// <response code="404"> Usuário não adicionado.</response>
         /// <response code="400"> Usuário não adicionado.</response>    
+        //[Authorize]
         [HttpPost]
         [Route("AdicionarUsuarioAsync")]
         [Produces("application/json")]
@@ -127,6 +131,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         /// <response code="200"> Usuário editado com sucesso.</response>
         /// <response code="404"> Usuário não editado.</response>
         /// <response code="400"> Usuário não editado.</response>
+        //[Authorize]
         [HttpPut]
         [Route("EditarUsuarioAsync")]
         [Produces("application/json")]
@@ -162,6 +167,7 @@ namespace APIRESTCRUDDAPPER.Controllers
         /// <response code="200"> Usuário deletado com sucesso.</response>
         /// <response code="404"> Usuário não deletado.</response>
         /// <response code="400"> Usuário não deletado.</response>
+        //[Authorize]
         [HttpDelete]
         [Route("DeletarUsuarioAsync")]
         [Produces("application/json")]
